@@ -3,11 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "license": "MIT OR Apache-2.0",
+  "main": "index.js",
+  "scripts": {},
   "dependencies": {
     "@biomejs/biome": "workspace:*"
   }
