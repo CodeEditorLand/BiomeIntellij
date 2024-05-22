@@ -1,18 +1,12 @@
 package com.github.biomejs.intellijbiome.settings
 
-<<<<<<< HEAD
 import com.github.biomejs.intellijbiome.Feature
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
 import com.intellij.lang.javascript.linter.GlobPatternUtil
 import com.intellij.openapi.components.*
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.vfs.VirtualFile
 import java.io.File
-<<<<<<< HEAD
 import java.util.*
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
 
 
 @Service(Service.Level.PROJECT)
@@ -65,7 +59,6 @@ class BiomeSettings :
             state.applyUnsafeFixesOnSave = value
         }
 
-<<<<<<< HEAD
     fun getEnabledFeatures(): EnumSet<Feature> {
         val features = EnumSet.noneOf(Feature::class.java)
         if (formatOnSave) {
@@ -80,8 +73,6 @@ class BiomeSettings :
         return features
     }
 
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
     fun isEnabled(): Boolean {
         return configurationMode !== ConfigurationMode.DISABLED
     }

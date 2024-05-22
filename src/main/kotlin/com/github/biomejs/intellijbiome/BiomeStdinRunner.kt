@@ -48,13 +48,8 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
     }
 
     override fun createCommandLine(file: VirtualFile, action: String, args: List<String>): GeneralCommandLine {
-<<<<<<< HEAD
         val configPath = biomePackage.configPath(file)
         val exePath = biomePackage.binaryPath(configPath, false)
-=======
-        val configPath = biomePackage.configPath
-        val exePath = biomePackage.binaryPath()
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         val params = SmartList(action, "--stdin-file-path", file.path)
         params.addAll(args)
 
@@ -69,10 +64,7 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
 
         return GeneralCommandLine().runBiomeCLI(project, exePath).apply {
             withInput(File(file.path))
-<<<<<<< HEAD
             withWorkDirectory(configPath)
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
             addParameters(params)
         }
     }
@@ -94,33 +86,22 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
     private fun getCheckFlags(features: EnumSet<Feature>): List<String> {
         val args = SmartList<String>()
 
-<<<<<<< HEAD
         if (features.isEmpty()) return args
 
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         if (features.contains(Feature.Format)) {
             args.add("--formatter-enabled=true")
         } else {
             args.add("--formatter-enabled=false")
         }
 
-<<<<<<< HEAD
         if (!features.contains(Feature.SafeFixes) && !features.contains(Feature.UnsafeFixes)) {
             args.add("--linter-enabled=false")
-=======
-        if (features.contains(Feature.SafeFixes) && !features.contains(Feature.UnsafeFixes)) {
-            args.add("--apply")
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         }
 
         if (features.contains(Feature.UnsafeFixes)) {
             args.add("--apply-unsafe")
-<<<<<<< HEAD
         } else {
             args.add("--apply")
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         }
 
         return args

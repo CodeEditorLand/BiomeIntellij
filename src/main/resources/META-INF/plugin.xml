@@ -18,21 +18,12 @@
 
   <depends>com.intellij.modules.platform</depends>
   <depends>com.intellij.modules.ultimate</depends>
-<<<<<<< HEAD
   <depends>com.intellij.modules.javascript</depends>
-=======
-  <depends>JavaScript</depends>
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
 
   <resource-bundle>messages.BiomeBundle</resource-bundle>
 
   <extensions defaultExtensionNs="com.intellij">
     <notificationGroup id="Biome" displayType="BALLOON"/>
-<<<<<<< HEAD
-=======
-    <statusBarWidgetFactory implementation="com.github.biomejs.intellijbiome.widgets.BiomeStatusBarWidgetFactory"
-                            id="BiomeWidget"/>
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
     <platform.lsp.serverSupportProvider
       implementation="com.github.biomejs.intellijbiome.lsp.BiomeLspServerSupportProvider"/>
     <projectConfigurable id="Settings.Biome"
