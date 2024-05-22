@@ -1,26 +1,6 @@
 package com.github.biomejs.intellijbiome.lsp
 
 import com.github.biomejs.intellijbiome.BiomeBundle
-<<<<<<< HEAD
-import com.github.biomejs.intellijbiome.BiomeIcons
-import com.github.biomejs.intellijbiome.BiomePackage
-import com.github.biomejs.intellijbiome.extensions.runBiomeCLI
-import com.github.biomejs.intellijbiome.listeners.BIOME_CONFIG_RESOLVED_TOPIC
-import com.github.biomejs.intellijbiome.services.BiomeServerService
-import com.github.biomejs.intellijbiome.settings.BiomeConfigurable
-import com.github.biomejs.intellijbiome.settings.BiomeSettings
-import com.intellij.execution.ExecutionException
-import com.intellij.execution.configurations.GeneralCommandLine
-import com.intellij.openapi.components.service
-import com.intellij.openapi.project.Project
-import com.intellij.openapi.vfs.VirtualFile
-import com.intellij.platform.lsp.api.*
-import com.intellij.platform.lsp.api.customization.LspFormattingSupport
-import com.intellij.platform.lsp.api.lsWidget.LspServerWidgetItem
-import com.intellij.util.SmartList
-
-
-=======
 import com.github.biomejs.intellijbiome.BiomePackage
 import com.github.biomejs.intellijbiome.extensions.runBiomeCLI
 import com.github.biomejs.intellijbiome.listeners.BIOME_CONFIG_RESOLVED_TOPIC
@@ -34,7 +14,6 @@ import com.intellij.platform.lsp.api.ProjectWideLspServerDescriptor
 import com.intellij.platform.lsp.api.customization.LspFormattingSupport
 import com.intellij.util.SmartList
 
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
 @Suppress("UnstableApiUsage")
 class BiomeLspServerSupportProvider : LspServerSupportProvider {
     override fun fileOpened(
@@ -42,48 +21,13 @@ class BiomeLspServerSupportProvider : LspServerSupportProvider {
         file: VirtualFile,
         serverStarter: LspServerSupportProvider.LspServerStarter
     ) {
-<<<<<<< HEAD
-        val currentConfigPath = project.service<BiomeServerService>().getCurrentConfigPath()
-        if (currentConfigPath != null) {
-            val executable = BiomePackage(project).binaryPath(currentConfigPath, false) ?: return
-            serverStarter.ensureServerStarted(BiomeLspServerDescriptor(project, executable, currentConfigPath))
-            return
-        }
-
-        val configPath = BiomePackage(project).configPath(file)
-        val executable = BiomePackage(project).binaryPath(configPath, false) ?: return
-        serverStarter.ensureServerStarted(BiomeLspServerDescriptor(project, executable, configPath))
-    }
-
-    override fun createLspServerWidgetItem(lspServer: LspServer, currentFile: VirtualFile?) = LspServerWidgetItem(
-        lspServer, currentFile,
-        BiomeIcons.BiomeIcon, BiomeConfigurable::class.java
-    )
-}
-
-@Suppress("UnstableApiUsage")
-class BiomeLspServerManagerListener(val project: Project) : LspServerManagerListener {
-    override fun serverStateChanged(lspServer: LspServer) {
-        if (lspServer.descriptor is BiomeLspServerDescriptor && lspServer.state == LspServerState.ShutdownUnexpectedly) {
-            // restart again if the server was shutdown unexpectedly.
-            // This can be caused by race condition, when we restart LSP server because of config change,
-            // but Intellij also tried to send a request to it at the same time.
-            // Unfortunate There is no way prevent IDEA send requests after LSP started.
-            project.service<BiomeServerService>().restartBiomeServer()
-        }
-=======
         val executable = BiomePackage(project).binaryPath() ?: return
         serverStarter.ensureServerStarted(LspServerDescriptor(project, executable))
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
     }
 }
 
 @Suppress("UnstableApiUsage")
-<<<<<<< HEAD
-private class BiomeLspServerDescriptor(project: Project, val executable: String, val configPath: String?) :
-=======
 private class LspServerDescriptor(project: Project, val executable: String) :
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
     ProjectWideLspServerDescriptor(project, "Biome") {
     private val biomePackage = BiomePackage(project)
 
@@ -97,10 +41,7 @@ private class LspServerDescriptor(project: Project, val executable: String) :
     }
 
     override fun createCommandLine(): GeneralCommandLine {
-<<<<<<< HEAD
-=======
         val configPath = biomePackage.configPath
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         val params = SmartList("lsp-proxy")
 
         if (!configPath.isNullOrEmpty()) {
@@ -118,10 +59,6 @@ private class LspServerDescriptor(project: Project, val executable: String) :
 
         return GeneralCommandLine().runBiomeCLI(project, executable).apply {
             addParameters(params)
-<<<<<<< HEAD
-            withWorkDirectory(configPath)
-=======
->>>>>>> a1d4e0e301649dfcf5d3c1d9d5a2f0bd30f144d7
         }
     }
 
