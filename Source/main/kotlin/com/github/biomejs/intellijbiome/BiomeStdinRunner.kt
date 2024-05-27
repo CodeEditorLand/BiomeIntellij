@@ -48,8 +48,8 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
     }
 
     override fun createCommandLine(file: VirtualFile, action: String, args: List<String>): GeneralCommandLine {
-        val configPath = biomePackage.configPath
-        val exePath = biomePackage.binaryPath()
+        val configPath = biomePackage.configPath(file)
+        val exePath = biomePackage.binaryPath(configPath, false)
         val params = SmartList(action, "--stdin-file-path", file.path)
         params.addAll(args)
 
@@ -64,6 +64,7 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
 
         return GeneralCommandLine().runBiomeCLI(project, exePath).apply {
             withInput(File(file.path))
+            withWorkDirectory(configPath)
             addParameters(params)
         }
     }
@@ -85,18 +86,22 @@ class BiomeStdinRunner(private val project: Project) : BiomeRunner {
     private fun getCheckFlags(features: EnumSet<Feature>): List<String> {
         val args = SmartList<String>()
 
+        if (features.isEmpty()) return args
+
         if (features.contains(Feature.Format)) {
             args.add("--formatter-enabled=true")
         } else {
             args.add("--formatter-enabled=false")
         }
 
-        if (features.contains(Feature.SafeFixes) && !features.contains(Feature.UnsafeFixes)) {
-            args.add("--apply")
+        if (!features.contains(Feature.SafeFixes) && !features.contains(Feature.UnsafeFixes)) {
+            args.add("--linter-enabled=false")
         }
 
         if (features.contains(Feature.UnsafeFixes)) {
             args.add("--apply-unsafe")
+        } else {
+            args.add("--apply")
         }
 
         return args
