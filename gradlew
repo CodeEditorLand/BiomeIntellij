@@ -74,9 +74,9 @@ while
 do
 	ls=$(ls -ld "$app_path")
 	link=${ls#*' -> '}
-	case $link in          #(
-		/*) app_path=$link ;; #(
-		*) app_path=$APP_HOME$link ;;
+	case $link in         #(
+	/*) app_path=$link ;; #(
+	*) app_path=$APP_HOME$link ;;
 	esac
 done
 
@@ -104,11 +104,11 @@ cygwin=false
 msys=false
 darwin=false
 nonstop=false
-case "$(uname)" in            #(
-	CYGWIN*) cygwin=true ;;      #(
-	Darwin*) darwin=true ;;      #(
-	MSYS* | MINGW*) msys=true ;; #(
-	NONSTOP*) nonstop=true ;;
+case "$(uname)" in           #(
+CYGWIN*) cygwin=true ;;      #(
+Darwin*) darwin=true ;;      #(
+MSYS* | MINGW*) msys=true ;; #(
+NONSTOP*) nonstop=true ;;
 esac
 
 CLASSPATH=$APP_HOME/gradle/wrapper/gradle-wrapper.jar
@@ -129,7 +129,7 @@ location of your Java installation."
 	fi
 else
 	JAVACMD=java
-	if ! command -v java > /dev/null 2>&1; then
+	if ! command -v java >/dev/null 2>&1; then
 		die "ERROR: JAVA_HOME is not set and no 'java' command could be found in your PATH.
 
 Please set the JAVA_HOME variable in your environment to match the
@@ -140,21 +140,21 @@ fi
 # Increase the maximum file descriptors if we can.
 if ! "$cygwin" && ! "$darwin" && ! "$nonstop"; then
 	case $MAX_FD in #(
-		max*)
-			# In POSIX sh, ulimit -H is undefined. That's why the result is checked to see if it worked.
-			# shellcheck disable=SC3045
-			MAX_FD=$(ulimit -H -n) \
-				|| warn "Could not query maximum file descriptor limit"
-			;;
+	max*)
+		# In POSIX sh, ulimit -H is undefined. That's why the result is checked to see if it worked.
+		# shellcheck disable=SC3045
+		MAX_FD=$(ulimit -H -n) ||
+			warn "Could not query maximum file descriptor limit"
+		;;
 	esac
-	case $MAX_FD in  #(
-		'' | soft) : ;; #(
-		*)
-			# In POSIX sh, ulimit -n is undefined. That's why the result is checked to see if it worked.
-			# shellcheck disable=SC3045
-			ulimit -n "$MAX_FD" \
-				|| warn "Could not set maximum file descriptor limit to $MAX_FD"
-			;;
+	case $MAX_FD in #(
+	'' | soft) : ;; #(
+	*)
+		# In POSIX sh, ulimit -n is undefined. That's why the result is checked to see if it worked.
+		# shellcheck disable=SC3045
+		ulimit -n "$MAX_FD" ||
+			warn "Could not set maximum file descriptor limit to $MAX_FD"
+		;;
 	esac
 fi
 
@@ -176,13 +176,13 @@ if "$cygwin" || "$msys"; then
 	# Now convert the arguments - kludge to limit ourselves to /bin/sh
 	for arg; do
 		if
-			case $arg in  #(
-				-*) false ;; # don't mess with options #(
-				/?*)
-					t=${arg#/} t=/${t%%/*} # looks like a POSIX filepath
-					[ -e "$t" ]
-					;; #(
-				*) false ;;
+			case $arg in #(
+			-*) false ;; # don't mess with options #(
+			/?*)
+				t=${arg#/} t=/${t%%/*} # looks like a POSIX filepath
+				[ -e "$t" ]
+				;; #(
+			*) false ;;
 			esac
 		then
 			arg=$(cygpath --path --ignore --mixed "$arg")
@@ -215,7 +215,7 @@ set -- \
 	"$@"
 
 # Stop when "xargs" is not available.
-if ! command -v xargs > /dev/null 2>&1; then
+if ! command -v xargs >/dev/null 2>&1; then
 	die "xargs is not available"
 fi
 
@@ -239,10 +239,10 @@ fi
 #
 
 eval "set -- $(
-	printf '%s\n' "$DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS" \
-		| xargs -n1 \
-		| sed ' s~[^-[:alnum:]+,./:=@_]~\\&~g; ' \
-		| tr '\n' ' '
+	printf '%s\n' "$DEFAULT_JVM_OPTS $JAVA_OPTS $GRADLE_OPTS" |
+		xargs -n1 |
+		sed ' s~[^-[:alnum:]+,./:=@_]~\\&~g; ' |
+		tr '\n' ' '
 )" '"$@"'
 
 exec "$JAVACMD" "$@"
