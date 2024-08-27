@@ -15,7 +15,7 @@ development experience. This plugin integrates seamlessly with many
 -   🚧 Reformat your code
 -   💾 Automatically applying code fixes on save
 
-## Installation
+## 🚀 Installation
 
 To install the Biome IntelliJ plugin, head over to the
 [official plugin page](https://plugins.jetbrains.com/plugin/22761-biome) or
@@ -83,7 +83,7 @@ This plugin is currently supported in the following IDEs:
 
 -   [![RubyMine Version](https://img.shields.io/badge/RubyMine-2024.1-A11523.svg?labelcolor=000&logo=ruby&labelColor=black)](https://www.jetbrains.com/ruby/)
 
-## Usage
+## 🛠️ Usage
 
 Biome CLI comes with many commands and options, so you can use only what you
 need.
