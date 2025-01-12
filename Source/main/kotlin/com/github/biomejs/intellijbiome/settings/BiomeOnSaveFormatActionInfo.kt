@@ -5,7 +5,7 @@ import com.github.biomejs.intellijbiome.BiomePackage
 import com.intellij.ide.actionsOnSave.ActionOnSaveBackedByOwnConfigurable
 import com.intellij.ide.actionsOnSave.ActionOnSaveComment
 import com.intellij.ide.actionsOnSave.ActionOnSaveContext
-import com.intellij.openapi.util.text.StringUtil
+import com.intellij.platform.ide.progress.runWithModalProgressBlocking
 
 class BiomeOnSaveFormatActionInfo(actionOnSaveContext: ActionOnSaveContext) :
     ActionOnSaveBackedByOwnConfigurable<BiomeConfigurable>(
@@ -17,7 +17,13 @@ class BiomeOnSaveFormatActionInfo(actionOnSaveContext: ActionOnSaveContext) :
     override fun getActionOnSaveName() =
         BiomeBundle.message("biome.run.format.on.save.checkbox.on.actions.on.save.page")
 
+    override fun isApplicableAccordingToStoredState(): Boolean =
+        BiomeSettings.getInstance(project).configurationMode != ConfigurationMode.DISABLED
+
     override fun isActionOnSaveEnabledAccordingToStoredState() = BiomeSettings.getInstance(project).formatOnSave
+
+    override fun isApplicableAccordingToUiState(configurable: BiomeConfigurable): Boolean =
+        !configurable.disabledConfiguration.isSelected
 
     override fun isActionOnSaveEnabledAccordingToUiState(configurable: BiomeConfigurable) =
         configurable.runFormatOnSaveCheckBox.isSelected
@@ -29,43 +35,24 @@ class BiomeOnSaveFormatActionInfo(actionOnSaveContext: ActionOnSaveContext) :
     override fun getActionLinks() = listOf(createGoToPageInSettingsLink(BiomeConfigurable.CONFIGURABLE_ID))
 
     override fun getCommentAccordingToUiState(configurable: BiomeConfigurable): ActionOnSaveComment? {
+        if (!isSaveActionApplicable) return ActionOnSaveComment.info(BiomeBundle.message("biome.on.save.comment.disabled"))
+
         val biomePackage = BiomePackage(project)
-        val version = biomePackage.versionNumber()
+        val version = runWithModalProgressBlocking(project, BiomeBundle.message("biome.version")) {
+            biomePackage.versionNumber()
+        }
         return ActionInfo.defaultComment(version, configurable.runForFilesField.text.trim(), isActionOnSaveEnabled)
     }
 
     override fun getCommentAccordingToStoredState(): ActionOnSaveComment? {
+        if (!isSaveActionApplicable) return ActionOnSaveComment.info(BiomeBundle.message("biome.on.save.comment.disabled"))
+
         val biomePackage = BiomePackage(project)
         val settings = BiomeSettings.getInstance(project)
-        val version = biomePackage.versionNumber()
-
-        return ActionInfo.defaultComment(version, settings.filePattern, isActionOnSaveEnabled)
-    }
-}
-
-class ActionInfo {
-    companion object {
-        fun defaultComment(
-            version: String?,
-            filePattern: String,
-            isActionOnSaveEnabled: Boolean
-        ): ActionOnSaveComment? {
-            if (version == null) {
-                val message = BiomeBundle.message("biome.run.on.save.package.not.specified.warning")
-                return if (isActionOnSaveEnabled) ActionOnSaveComment.warning(message) else ActionOnSaveComment.info(
-                    message
-                )
-            }
-
-            return ActionOnSaveComment.info(
-                BiomeBundle.message(
-                    "biome.run.on.save.version.and.files.pattern",
-                    shorten(version, 15),
-                    shorten(filePattern, 40)
-                )
-            )
+        val version = runWithModalProgressBlocking(project, BiomeBundle.message("biome.version")) {
+            biomePackage.versionNumber()
         }
 
-        fun shorten(s: String, max: Int) = StringUtil.shortenTextWithEllipsis(s, max, 0, true)
+        return ActionInfo.defaultComment(version, settings.filePattern, isActionOnSaveEnabled)
     }
 }
